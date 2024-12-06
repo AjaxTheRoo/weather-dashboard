@@ -24,15 +24,11 @@ The Weather Dashboard is a full-stack web application that allows users to view 
    ```bash
    git clone <repository-url>
    ```
-2. Navigate to the project directory:
-   ```bash
-   cd weather-dashboard
-   ```
-3. Install dependencies:
+2. Install dependencies:
    ```bash
    npm install
    ```
-4. Set up environment variables:
+3. Set up environment variables:
    - Create a `.env` file in the root directory.
    - Add your OpenWeather API key:
      ```env
