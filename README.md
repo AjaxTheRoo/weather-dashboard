@@ -88,6 +88,6 @@ This project is licensed under the MIT License.
 ---
 
 ## Contributors
-This project was developed as part of the 09 Servers and APIs challenge in the coding boot camp. Contributions are welcome! Feel free to fork the repository and submit a pull request.
+Contributions are welcome! Feel free to fork the repository and submit a pull request.
 
 ---
