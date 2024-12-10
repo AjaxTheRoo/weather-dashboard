@@ -13,12 +13,21 @@ class Weather {
   description: string;
   humidity: number;
   windSpeed: number;
+  cityName: string;
+  date: Date;
+  icon: string;
+  iconDescription: string;
 
-  constructor(temperature: number, description: string, humidity: number, windSpeed: number) {
+
+  constructor(temperature: number, description: string, humidity: number, windSpeed: number, cityName: string, date: Date, icon: string, iconDescription: string) {
     this.temperature = temperature;
     this.description = description;
     this.humidity = humidity;
-    this.windSpeed = windSpeed;
+    this.windSpeed = windSpeed
+    this.cityName = cityName;
+    this.date = date;
+    this.icon = icon;
+    this.iconDescription = iconDescription
   }
 }
 
@@ -29,8 +38,8 @@ class WeatherService {
   private cityName = '';
 
   constructor() {
-    this.baseURL = process.env.WEATHER_API_BASE_URL || '';
-    this.apiKey = process.env.WEATHER_API_KEY || '';
+    this.baseURL = process.env.API_BASE_URL || '';
+    this.apiKey = process.env.API_KEY || '';
   }
 
   private async fetchLocationData(): Promise<any> {
@@ -50,7 +59,7 @@ class WeatherService {
   }
 
   private buildWeatherQuery(coordinates: Coordinates): string {
-   return `${this.baseURL}/data/3.0/onecall?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}`;
+   return `${this.baseURL}/data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}`;
    //https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key};
   }
 
@@ -75,7 +84,7 @@ class WeatherService {
     const description = response.weather[0].description;
     const humidity = response.main.humidity;
     const windSpeed = response.wind.speed;
-    return new Weather(temperature, description, humidity, windSpeed);
+    return new Weather(temperature, description, humidity, windSpeed, this.cityName, new Date(), response.weather[0].icon, response.weather[0].description);
   }
 
   // Build an array of Weather objects from the forecast data
@@ -85,7 +94,7 @@ class WeatherService {
       const description = data.weather[0].description;
       const humidity = data.main.humidity;
       const windSpeed = data.wind.speed;
-      return new Weather(temperature, description, humidity, windSpeed);
+      return new Weather(temperature, description, humidity, windSpeed, this.cityName, new Date(data.dt_txt), data.weather[0].icon, data.weather[0].description);
     });
     // Add the current weather to the beginning of the forecast array
     forecastArray.unshift(currentWeather);
@@ -100,7 +109,7 @@ class WeatherService {
     // Fetch the weather data using the coordinates
     const weatherData = await this.fetchWeatherData(coordinates);
     // Parse the current weather from the weather data
-    const currentWeather = this.parseCurrentWeather(weatherData);
+    const currentWeather = this.parseCurrentWeather(weatherData.list[0]);
     // Build the forecast array from the weather data
     const forecastArray = this.buildForecastArray(currentWeather, weatherData.list);
     return forecastArray;

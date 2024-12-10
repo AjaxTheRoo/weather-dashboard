@@ -3,15 +3,14 @@ import express from 'express';
 dotenv.config();
 
 // Import the routes
-import routes from './routes/api/index.js';
+import routes from './routes/index.js';  // << notice the no /api/ in the path
 
 const app = express();
 
 const PORT = process.env.PORT || 3001;
 
 // Serve static files of entire client dist folder
-app.use('../../client/dist');
-app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
+app.use(express.static('../../client/dist')); // << notice the express.static
 // Implement middleware for parsing JSON and urlencoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
